@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { OrderService } from './order.service';
-import { Order, OrderCreateRequest, OrderStatus } from '../models/order.model';
-import { ApiResponse } from '../models/api-response.model';
+import { OrderService } from '../../app/services/order.service';
+import { Order, OrderCreateRequest, OrderStatus } from '../../app/models/order.model';
+import { ApiResponse } from '../../app/models/api-response.model';
 
 describe('OrderService', () => {
   let service: OrderService;

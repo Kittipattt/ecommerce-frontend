@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { authGuard, adminGuard } from './guards';
-import { AuthService } from '../services/auth.service';
-import { NotificationService } from '../services/notification.service';
+import { authGuard, adminGuard } from '../../app/core/guards';
+import { AuthService } from '../../app/services/auth.service';
+import { NotificationService } from '../../app/services/notification.service';
 
 describe('Route Guards', () => {
   let authServiceMock: {

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { CartService } from './cart.service';
-import { NotificationService } from './notification.service';
-import { Product } from '../models/product.model';
+import { CartService } from '../../app/services/cart.service';
+import { NotificationService } from '../../app/services/notification.service';
+import { Product } from '../../app/models/product.model';
 
 describe('CartService (Signals Testing)', () => {
   let service: CartService;

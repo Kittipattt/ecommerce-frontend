@@ -10,102 +10,103 @@ import { OrderStatus } from '../../../models/order.model';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="admin-page">
-      <div class="admin-header">
+    <div class="max-w-7xl mx-auto px-6 py-10 w-full">
+      <!-- Admin Header -->
+      <div class="flex justify-between items-end mb-8 flex-wrap gap-4">
         <div>
-          <h1 class="page-title">Executive Dashboard</h1>
-          <p class="page-subtitle">Real-time overview of store performance, revenue and fulfillment</p>
+          <h1 class="font-heading text-3xl font-extrabold text-white">Executive Dashboard</h1>
+          <p class="text-sm text-gray-400 mt-1">Real-time overview of store performance, revenue and fulfillment</p>
         </div>
-        <div class="admin-nav-actions">
+        <div class="flex gap-3">
           <a routerLink="/admin/products" class="btn btn-secondary btn-sm">Manage Products</a>
           <a routerLink="/admin/orders" class="btn btn-secondary btn-sm">Manage Orders</a>
         </div>
       </div>
 
       @if (isLoading()) {
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Compiling analytics from backend...</p>
+        <div class="flex flex-col items-center gap-4 py-20 text-gray-400">
+          <div class="w-10 h-10 border-3 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
+          <p class="text-sm">Compiling analytics from backend...</p>
         </div>
       } @else if (summary(); as data) {
         <!-- KPI Metrics Grid -->
-        <div class="metrics-grid">
-          <div class="card metric-card">
-            <div class="metric-icon revenue-icon">💰</div>
-            <div class="metric-details">
-              <span class="metric-label">Total Revenue</span>
-              <span class="metric-value text-accent">\${{ data.totalRevenue | number:'1.2-2' }}</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <div class="p-5 rounded-2xl bg-gray-900 border border-gray-800 flex items-center gap-4 shadow-lg hover:border-gray-700 transition-colors">
+            <div class="w-14 h-14 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-2xl shrink-0">💰</div>
+            <div class="flex flex-col">
+              <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Revenue</span>
+              <span class="font-heading font-extrabold text-2xl text-cyan-400 font-mono mt-0.5">\${{ data.totalRevenue | number:'1.2-2' }}</span>
             </div>
           </div>
 
-          <div class="card metric-card">
-            <div class="metric-icon orders-icon">🛒</div>
-            <div class="metric-details">
-              <span class="metric-label">Total Orders</span>
-              <span class="metric-value">{{ data.totalOrders }}</span>
+          <div class="p-5 rounded-2xl bg-gray-900 border border-gray-800 flex items-center gap-4 shadow-lg hover:border-gray-700 transition-colors">
+            <div class="w-14 h-14 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-2xl shrink-0">🛒</div>
+            <div class="flex flex-col">
+              <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Orders</span>
+              <span class="font-heading font-extrabold text-2xl text-white font-mono mt-0.5">{{ data.totalOrders }}</span>
             </div>
           </div>
 
-          <div class="card metric-card">
-            <div class="metric-icon products-icon">📦</div>
-            <div class="metric-details">
-              <span class="metric-label">Active Products</span>
-              <span class="metric-value">{{ data.totalProducts }}</span>
+          <div class="p-5 rounded-2xl bg-gray-900 border border-gray-800 flex items-center gap-4 shadow-lg hover:border-gray-700 transition-colors">
+            <div class="w-14 h-14 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-2xl shrink-0">📦</div>
+            <div class="flex flex-col">
+              <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Active Products</span>
+              <span class="font-heading font-extrabold text-2xl text-white font-mono mt-0.5">{{ data.totalProducts }}</span>
             </div>
           </div>
 
-          <div class="card metric-card">
-            <div class="metric-icon stock-icon">⚠️</div>
-            <div class="metric-details">
-              <span class="metric-label">Low Stock Alerts</span>
-              <span class="metric-value" [class.text-danger]="data.lowStockCount > 0">{{ data.lowStockCount }}</span>
+          <div class="p-5 rounded-2xl bg-gray-900 border border-gray-800 flex items-center gap-4 shadow-lg hover:border-gray-700 transition-colors">
+            <div class="w-14 h-14 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-2xl shrink-0">⚠️</div>
+            <div class="flex flex-col">
+              <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Low Stock Alerts</span>
+              <span class="font-heading font-extrabold text-2xl font-mono mt-0.5" [ngClass]="data.lowStockCount > 0 ? 'text-red-400' : 'text-gray-200'">{{ data.lowStockCount }}</span>
             </div>
           </div>
         </div>
 
         <!-- Low Stock Warning Banner -->
         @if (data.lowStockProducts.length > 0) {
-          <div class="card warning-banner">
-            <div class="banner-title">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <div class="p-5 rounded-2xl bg-amber-950/20 border border-amber-500/40 mb-8 space-y-3">
+            <div class="flex items-center gap-2.5 text-amber-300 font-semibold text-sm">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
               <span>Inventory Attention Required: {{ data.lowStockProducts.length }} items have critically low stock</span>
             </div>
-            <div class="low-stock-pills">
+            <div class="flex flex-wrap gap-2">
               @for (item of data.lowStockProducts; track item.id) {
-                <span class="stock-pill">
-                  {{ item.name }} <strong>({{ item.stockQuantity }} left)</strong>
+                <span class="bg-gray-900 border border-gray-800 px-3 py-1 rounded-lg text-xs text-gray-300">
+                  {{ item.name }} <strong class="text-red-400">({{ item.stockQuantity }} left)</strong>
                 </span>
               }
             </div>
           </div>
         }
 
-        <!-- Recent Orders Table -->
-        <div class="card table-card">
-          <div class="table-card-header">
-            <h3>Recent Orders</h3>
-            <a routerLink="/admin/orders" class="link-view-all">View All Orders →</a>
+        <!-- Recent Orders Table Card -->
+        <div class="p-6 rounded-2xl bg-gray-900 border border-gray-800 shadow-xl space-y-4">
+          <div class="flex justify-between items-center pb-2">
+            <h3 class="font-heading font-bold text-lg text-white">Recent Orders</h3>
+            <a routerLink="/admin/orders" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 hover:underline">View All Orders →</a>
           </div>
 
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
+          <div class="overflow-x-auto rounded-xl border border-gray-800">
+            <table class="w-full text-left text-sm text-gray-300">
+              <thead class="bg-gray-800/80 text-xs uppercase tracking-wider text-gray-400 border-b border-gray-800">
                 <tr>
-                  <th>Order #</th>
-                  <th>Customer</th>
-                  <th>Date</th>
-                  <th>Total</th>
-                  <th>Status</th>
+                  <th class="px-5 py-3.5 font-semibold">Order #</th>
+                  <th class="px-5 py-3.5 font-semibold">Customer</th>
+                  <th class="px-5 py-3.5 font-semibold">Date</th>
+                  <th class="px-5 py-3.5 font-semibold">Total</th>
+                  <th class="px-5 py-3.5 font-semibold">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="divide-y divide-gray-800/60">
                 @for (order of data.recentOrders; track order.id) {
-                  <tr>
-                    <td><strong class="font-mono text-primary">{{ order.orderNumber }}</strong></td>
-                    <td>{{ order.shippingName }}</td>
-                    <td>{{ order.createdAt | date:'shortDate' }}</td>
-                    <td>\${{ order.totalAmount | number:'1.2-2' }}</td>
-                    <td>
+                  <tr class="hover:bg-gray-800/30 transition-colors">
+                    <td class="px-5 py-4 font-mono font-bold text-indigo-400">{{ order.orderNumber }}</td>
+                    <td class="px-5 py-4 text-gray-200">{{ order.shippingName }}</td>
+                    <td class="px-5 py-4 text-gray-400">{{ order.createdAt | date:'shortDate' }}</td>
+                    <td class="px-5 py-4 font-mono font-bold text-gray-200">\${{ order.totalAmount | number:'1.2-2' }}</td>
+                    <td class="px-5 py-4">
                       <span class="badge" [ngClass]="getStatusBadge(order.status)">
                         {{ order.status }}
                       </span>
@@ -118,139 +119,7 @@ import { OrderStatus } from '../../../models/order.model';
         </div>
       }
     </div>
-  `,
-  styles: [`
-    .admin-page {
-      max-width: 1280px;
-      margin: 40px auto 80px auto;
-      padding: 0 24px;
-      width: 100%;
-    }
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .page-title {
-      font-size: 2rem;
-    }
-    .page-subtitle {
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-    .admin-nav-actions {
-      display: flex;
-      gap: 12px;
-    }
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      margin-bottom: 28px;
-    }
-    .metric-card {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 20px;
-    }
-    .metric-icon {
-      font-size: 2rem;
-      width: 52px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--radius-md);
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border);
-    }
-    .metric-details {
-      display: flex;
-      flex-direction: column;
-    }
-    .metric-label {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-    .metric-value {
-      font-family: var(--font-heading);
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-    .text-danger {
-      color: var(--danger) !important;
-    }
-    .warning-banner {
-      background: rgba(245, 158, 11, 0.1);
-      border-color: rgba(245, 158, 11, 0.4);
-      margin-bottom: 28px;
-      padding: 20px;
-    }
-    .banner-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #fcd34d;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin-bottom: 12px;
-    }
-    .low-stock-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .stock-pill {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      padding: 4px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 0.85rem;
-    }
-    .stock-pill strong {
-      color: #fca5a5;
-    }
-    .table-card {
-      padding: 24px;
-    }
-    .table-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-    .link-view-all {
-      font-size: 0.875rem;
-      color: #818cf8;
-      font-weight: 600;
-    }
-    .link-view-all:hover {
-      text-decoration: underline;
-    }
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 60px;
-      color: var(--text-secondary);
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(79, 70, 229, 0.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  `]
+  `
 })
 export class AdminDashboardComponent implements OnInit {
   dashboardService = inject(DashboardService);

@@ -1,4 +1,4 @@
-<div class="app-layout">
+<div class="min-h-screen flex flex-col bg-[#0b0f19] text-gray-100">
   <!-- Toast Notification Overlay -->
   <app-toast></app-toast>
 
@@ -6,7 +6,7 @@
   <app-navbar></app-navbar>
 
   <!-- Main View Router -->
-  <main class="main-content">
+  <main class="flex-1 w-full">
     <router-outlet></router-outlet>
   </main>
 
@@ -14,45 +14,49 @@
   <app-cart-drawer></app-cart-drawer>
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-col brand-col">
-        <div class="footer-brand">
-          <div class="brand-icon-sm">⚡</div>
-          <span class="footer-brand-name">Nexus<span class="text-primary">Tech</span></span>
+  <footer class="mt-auto bg-gray-900/90 border-t border-gray-800 backdrop-blur-md pt-16">
+    <div class="max-w-7xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xl">⚡</span>
+          <span class="font-heading text-xl font-extrabold text-white">Nexus<span class="text-indigo-400">Tech</span></span>
         </div>
-        <p class="footer-desc">
+        <p class="text-sm text-gray-400 leading-relaxed max-w-sm">
           Decoupled full-stack architecture powered by Angular & Spring Boot.
           Designed for maximum reliability and lightning-fast developer experience.
         </p>
       </div>
 
-      <div class="footer-col">
-        <h4 class="footer-heading">Architecture</h4>
-        <ul class="footer-links">
-          <li><span>Frontend: Angular Signals</span></li>
-          <li><span>Backend: Spring Boot 3</span></li>
-          <li><span>Auth: Stateless JWT</span></li>
-          <li><span>Database: H2 / JPA</span></li>
+      <div>
+        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 font-heading">Architecture</h4>
+        <ul class="space-y-2.5 text-sm text-gray-400">
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>Frontend: Angular Signals</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>Backend: Spring Boot 3</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>Auth: Stateless JWT</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>Database: H2 / JPA</li>
         </ul>
       </div>
 
-      <div class="footer-col">
-        <h4 class="footer-heading">Demo Credentials</h4>
-        <ul class="footer-links">
-          <li><span>Admin: admin&#64;store.com</span></li>
-          <li><span>Pass: admin123</span></li>
-          <li><span>Customer: customer&#64;store.com</span></li>
-          <li><span>Pass: customer123</span></li>
+      <div>
+        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4 font-heading">Demo Credentials</h4>
+        <ul class="space-y-2.5 text-sm text-gray-400">
+          <li class="bg-gray-800/60 p-2.5 rounded-lg border border-gray-700/50">
+            <span class="text-xs text-indigo-400 font-semibold block">Admin</span>
+            <span class="text-xs font-mono text-gray-300">admin&#64;store.com / admin123</span>
+          </li>
+          <li class="bg-gray-800/60 p-2.5 rounded-lg border border-gray-700/50">
+            <span class="text-xs text-cyan-400 font-semibold block">Customer</span>
+            <span class="text-xs font-mono text-gray-300">customer&#64;store.com / customer123</span>
+          </li>
         </ul>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <div class="footer-bottom-container">
+    <div class="border-t border-gray-800/80 bg-black/30 py-5">
+      <div class="max-w-7xl mx-auto px-6 flex flex-wrap justify-between items-center text-xs text-gray-500 gap-3">
         <span>&copy; 2026 NexusTech Store. Microservices Decoupled Architecture.</span>
-        <div class="backend-status">
-          <span class="status-dot"></span>
+        <div class="flex items-center gap-2 text-gray-400">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse"></span>
           <span>Backend Connected: http://localhost:8080</span>
         </div>
       </div>

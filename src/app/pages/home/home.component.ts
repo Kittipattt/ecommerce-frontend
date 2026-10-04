@@ -10,24 +10,25 @@ import { Category, Product } from '../../models/product.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="home-page">
+    <div class="max-w-7xl mx-auto px-6 pb-20 w-full">
       <!-- Hero Section -->
-      <section class="hero-section">
-        <div class="hero-bg-glow"></div>
-        <div class="hero-content">
-          <div class="hero-badge">
-            <span class="pulse-dot"></span> Next-Generation Tech Gear 2026
+      <section class="relative py-16 sm:py-24 flex flex-col items-center text-center overflow-hidden">
+        <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-r from-indigo-500/25 via-cyan-500/15 to-transparent blur-3xl pointer-events-none -z-10 rounded-full"></div>
+        <div class="relative z-10 max-w-3xl flex flex-col items-center gap-5">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-500/15 border border-indigo-500/30 rounded-full text-xs font-semibold text-indigo-300">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse"></span>
+            Next-Generation Tech Gear 2026
           </div>
-          <h1 class="hero-title">
-            Elevate Your Setup with <span class="gradient-text">Precision Hardware</span>
+          <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+            Elevate Your Setup with <span class="bg-gradient-to-r from-indigo-400 via-sky-300 to-cyan-400 bg-clip-text text-transparent">Precision Hardware</span>
           </h1>
-          <p class="hero-subtitle">
+          <p class="text-base sm:text-lg text-gray-400 leading-relaxed max-w-2xl">
             Curated premium workspace essentials, audiophile headsets, and ultra-responsive mechanical gear engineered for maximum performance.
           </p>
-          <div class="hero-actions">
-            <a href="#catalog" class="btn btn-primary">
+          <div class="flex flex-wrap items-center justify-center gap-4 mt-2">
+            <a href="#catalog" class="btn btn-primary shadow-lg shadow-indigo-500/25">
               Browse Collection
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
             </a>
             <button class="btn btn-secondary" (click)="filterFeatured()">
               Featured Releases
@@ -37,32 +38,32 @@ import { Category, Product } from '../../models/product.model';
       </section>
 
       <!-- Catalog Section -->
-      <section id="catalog" class="catalog-section">
-        <div class="catalog-header">
+      <section id="catalog" class="pt-8">
+        <div class="flex flex-wrap justify-between items-end gap-5 mb-8">
           <div>
-            <h2 class="section-title">Product Catalog</h2>
-            <p class="section-subtitle">Discover high-performance gear backed by our 2-year warranty</p>
+            <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white">Product Catalog</h2>
+            <p class="text-sm text-gray-400 mt-1">Discover high-performance gear backed by our 2-year warranty</p>
           </div>
 
           <!-- Controls: Search & Sort -->
-          <div class="catalog-controls">
-            <div class="search-input-wrapper">
-              <svg class="search-icon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+            <div class="relative flex-1 sm:w-72">
+              <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
               </svg>
               <input
                 type="text"
-                class="form-control search-input"
+                class="form-control pl-10 pr-8"
                 placeholder="Search products or specs..."
                 [(ngModel)]="searchTerm"
                 (ngModelChange)="onSearchChange()"
               />
               @if (searchTerm) {
-                <button class="clear-search-btn" (click)="clearSearch()">✕</button>
+                <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs cursor-pointer" (click)="clearSearch()">✕</button>
               }
             </div>
 
-            <select class="form-control sort-select" [(ngModel)]="sortBy" (ngModelChange)="loadProducts()">
+            <select class="form-control sm:w-48 cursor-pointer" [(ngModel)]="sortBy" (ngModelChange)="loadProducts()">
               <option value="id-desc">Newest Arrivals</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -72,17 +73,17 @@ import { Category, Product } from '../../models/product.model';
         </div>
 
         <!-- Category Pills -->
-        <div class="category-pills">
+        <div class="flex items-center gap-2.5 overflow-x-auto pb-4 mb-8">
           <button
-            class="cat-pill"
-            [class.active]="selectedCategoryId() === null"
+            class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer"
+            [ngClass]="selectedCategoryId() === null ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25' : 'bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/50'"
             (click)="selectCategory(null)">
             All Products
           </button>
           @for (cat of categories(); track cat.id) {
             <button
-              class="cat-pill"
-              [class.active]="selectedCategoryId() === cat.id"
+              class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer"
+              [ngClass]="selectedCategoryId() === cat.id ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25' : 'bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/50'"
               (click)="selectCategory(cat.id)">
               {{ cat.name }}
             </button>
@@ -91,50 +92,52 @@ import { Category, Product } from '../../models/product.model';
 
         <!-- Product Grid -->
         @if (isLoading()) {
-          <div class="loading-state">
-            <div class="spinner"></div>
-            <p>Loading products from backend...</p>
+          <div class="flex flex-col items-center gap-4 py-20 text-gray-400">
+            <div class="w-10 h-10 border-3 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
+            <p class="text-sm">Loading products from backend...</p>
           </div>
         } @else if (products().length === 0) {
-          <div class="empty-state card">
-            <p>No products found matching your criteria.</p>
+          <div class="p-12 rounded-2xl bg-gray-900 border border-gray-800 text-center flex flex-col items-center gap-3">
+            <p class="text-gray-400">No products found matching your criteria.</p>
             <button class="btn btn-outline btn-sm" (click)="resetFilters()">Reset Filters</button>
           </div>
         } @else {
-          <div class="product-grid">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @for (product of products(); track product.id) {
-              <div class="card card-interactive product-card" (click)="openDetail(product)">
-                <div class="product-image-box">
-                  <img [src]="product.imageUrl" [alt]="product.name" class="product-img" loading="lazy" />
+              <div
+                class="group relative rounded-2xl bg-gray-900 border border-gray-800 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
+                (click)="openDetail(product)">
+                <div class="relative aspect-[4/3] bg-gray-800/60 overflow-hidden">
+                  <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                   @if (product.featured) {
-                    <span class="badge badge-primary badge-pos">Featured</span>
+                    <span class="badge badge-primary absolute top-3 left-3 shadow">Featured</span>
                   }
                   @if (product.stockQuantity <= 5 && product.stockQuantity > 0) {
-                    <span class="badge badge-warning badge-pos-right">Low Stock: {{ product.stockQuantity }}</span>
+                    <span class="badge badge-warning absolute top-3 right-3 shadow">Low Stock: {{ product.stockQuantity }}</span>
                   } @else if (product.stockQuantity === 0) {
-                    <span class="badge badge-danger badge-pos-right">Out of Stock</span>
+                    <span class="badge badge-danger absolute top-3 right-3 shadow">Out of Stock</span>
                   }
                 </div>
 
-                <div class="product-info">
-                  <span class="product-cat">{{ product.category.name }}</span>
-                  <h3 class="product-name">{{ product.name }}</h3>
-                  <p class="product-desc">{{ product.description }}</p>
+                <div class="p-5 flex-1 flex flex-col">
+                  <span class="text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-1">{{ product.category.name }}</span>
+                  <h3 class="font-heading font-bold text-base text-white group-hover:text-indigo-300 transition-colors line-clamp-1 mb-1.5">{{ product.name }}</h3>
+                  <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-4 flex-1">{{ product.description }}</p>
 
-                  <div class="product-rating">
-                    <span class="stars">★ {{ product.rating }}</span>
-                    <span class="reviews">({{ product.reviewsCount }} reviews)</span>
+                  <div class="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
+                    <span class="text-amber-400 font-bold">★ {{ product.rating }}</span>
+                    <span>({{ product.reviewsCount }} reviews)</span>
                   </div>
 
-                  <div class="product-footer">
-                    <div class="product-price">
-                      <span class="currency">\$</span>{{ product.price | number:'1.2-2' }}
+                  <div class="flex items-center justify-between pt-3 border-t border-gray-800/80 mt-auto">
+                    <div class="font-heading font-extrabold text-lg text-cyan-400 font-mono">
+                      \${{ product.price | number:'1.2-2' }}
                     </div>
                     <button
-                      class="btn btn-primary btn-sm btn-add"
+                      class="btn btn-primary btn-sm"
                       [disabled]="product.stockQuantity <= 0"
                       (click)="addToCart($event, product)">
-                      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                       </svg>
                       {{ product.stockQuantity > 0 ? 'Add' : 'Sold Out' }}
@@ -149,45 +152,42 @@ import { Category, Product } from '../../models/product.model';
 
       <!-- Quick Product Detail Modal -->
       @if (selectedProduct(); as p) {
-        <div class="modal-overlay" (click)="closeDetail()">
-          <div class="modal-content modal-detail" (click)="$event.stopPropagation()">
-            <button class="modal-close-btn" (click)="closeDetail()">✕</button>
-            <div class="modal-detail-grid">
-              <div class="modal-image-col">
-                <img [src]="p.imageUrl" [alt]="p.name" class="modal-product-img" />
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[1000] p-4 sm:p-6 animate-in fade-in duration-200" (click)="closeDetail()">
+          <div class="relative bg-gray-900 border border-gray-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-200 p-6 sm:p-8" (click)="$event.stopPropagation()">
+            <button class="absolute top-5 right-5 text-gray-400 hover:text-white p-2 text-lg rounded-xl hover:bg-gray-800 transition-colors cursor-pointer z-10" (click)="closeDetail()">✕</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div class="aspect-square rounded-2xl overflow-hidden bg-gray-800 border border-gray-700/60">
+                <img [src]="p.imageUrl" [alt]="p.name" class="w-full h-full object-cover" />
               </div>
-              <div class="modal-info-col">
+              <div class="space-y-4">
                 <div class="badge badge-info">{{ p.category.name }}</div>
-                <h2 class="modal-title">{{ p.name }}</h2>
-                <div class="product-rating">
-                  <span class="stars">★ {{ p.rating }}</span>
-                  <span class="reviews">({{ p.reviewsCount }} verified customer reviews)</span>
+                <h2 class="font-heading text-2xl font-bold text-white leading-snug">{{ p.name }}</h2>
+                <div class="flex items-center gap-1.5 text-xs text-gray-400">
+                  <span class="text-amber-400 font-bold">★ {{ p.rating }}</span>
+                  <span>({{ p.reviewsCount }} verified customer reviews)</span>
                 </div>
-                <div class="modal-price">\${{ p.price | number:'1.2-2' }}</div>
-                <p class="modal-desc">{{ p.description }}</p>
+                <div class="font-heading font-extrabold text-3xl text-cyan-400 font-mono">\${{ p.price | number:'1.2-2' }}</div>
+                <p class="text-sm text-gray-400 leading-relaxed">{{ p.description }}</p>
 
-                <div class="modal-stock-status">
+                <div class="pt-1">
                   @if (p.stockQuantity > 5) {
-                    <span class="stock-indicator in-stock">● In Stock ({{ p.stockQuantity }} units available)</span>
+                    <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">● In Stock ({{ p.stockQuantity }} units available)</span>
                   } @else if (p.stockQuantity > 0) {
-                    <span class="stock-indicator low-stock">● Low Stock (Only {{ p.stockQuantity }} left)</span>
+                    <span class="text-xs font-semibold text-amber-400 flex items-center gap-1.5">● Low Stock (Only {{ p.stockQuantity }} left)</span>
                   } @else {
-                    <span class="stock-indicator out-stock">● Currently Out of Stock</span>
+                    <span class="text-xs font-semibold text-red-400 flex items-center gap-1.5">● Currently Out of Stock</span>
                   }
                 </div>
 
-                <div class="modal-actions">
-                  <div class="modal-qty">
-                    <label class="form-label">Quantity</label>
-                    <div class="qty-control">
-                      <button class="qty-btn" (click)="decreaseModalQty()">-</button>
-                      <span class="qty-val">{{ modalQuantity() }}</span>
-                      <button class="qty-btn" (click)="increaseModalQty(p.stockQuantity)">+</button>
-                    </div>
+                <div class="flex flex-col sm:flex-row gap-3 pt-3">
+                  <div class="flex items-center gap-2 bg-gray-800/80 border border-gray-700/60 rounded-xl px-2 py-1 shrink-0 justify-center">
+                    <button class="w-7 h-7 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 flex items-center justify-center font-bold text-xs cursor-pointer" (click)="decreaseModalQty()">-</button>
+                    <span class="font-mono font-bold text-sm text-gray-200 px-2">{{ modalQuantity() }}</span>
+                    <button class="w-7 h-7 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 flex items-center justify-center font-bold text-xs cursor-pointer" (click)="increaseModalQty(p.stockQuantity)">+</button>
                   </div>
 
                   <button
-                    class="btn btn-primary modal-add-btn"
+                    class="btn btn-primary flex-1 py-3 text-sm font-heading font-bold tracking-wide shadow-lg shadow-indigo-500/25"
                     [disabled]="p.stockQuantity <= 0"
                     (click)="addModalProductToCart(p)">
                     Add to Cart • \${{ (p.price * modalQuantity()) | number:'1.2-2' }}
@@ -199,394 +199,7 @@ import { Category, Product } from '../../models/product.model';
         </div>
       }
     </div>
-  `,
-  styles: [`
-    .home-page {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 24px 80px 24px;
-      width: 100%;
-    }
-    /* Hero */
-    .hero-section {
-      position: relative;
-      padding: 70px 0 60px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      overflow: hidden;
-    }
-    .hero-bg-glow {
-      position: absolute;
-      top: -20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 350px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(6, 182, 212, 0.1) 50%, transparent 70%);
-      filter: blur(50px);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 780px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      background: rgba(79, 70, 229, 0.15);
-      border: 1px solid rgba(79, 70, 229, 0.35);
-      border-radius: var(--radius-full);
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #a5b4fc;
-    }
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 10px #10b981;
-    }
-    .hero-title {
-      font-size: 3.25rem;
-      line-height: 1.15;
-      font-weight: 800;
-    }
-    .gradient-text {
-      background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero-subtitle {
-      font-size: 1.15rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 16px;
-      margin-top: 10px;
-    }
-
-    /* Catalog Section */
-    .catalog-section {
-      margin-top: 40px;
-    }
-    .catalog-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-    .section-title {
-      font-size: 1.85rem;
-      font-weight: 700;
-    }
-    .section-subtitle {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      margin-top: 4px;
-    }
-    .catalog-controls {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .search-input-wrapper {
-      position: relative;
-      min-width: 260px;
-    }
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-    .search-input {
-      padding-left: 40px;
-      padding-right: 36px;
-    }
-    .clear-search-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-    .sort-select {
-      width: auto;
-      min-width: 180px;
-      cursor: pointer;
-    }
-
-    /* Category Pills */
-    .category-pills {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      margin-bottom: 28px;
-    }
-    .cat-pill {
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      font-family: var(--font-heading);
-      font-size: 0.9rem;
-      font-weight: 600;
-      padding: 8px 18px;
-      border-radius: var(--radius-full);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all var(--transition-fast);
-    }
-    .cat-pill:hover {
-      border-color: var(--primary);
-      color: var(--text-main);
-    }
-    .cat-pill.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
-      box-shadow: 0 4px 12px var(--primary-glow);
-    }
-
-    /* Product Grid */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-    .product-card {
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .product-image-box {
-      position: relative;
-      height: 220px;
-      background: #1e293b;
-      overflow: hidden;
-    }
-    .product-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .product-card:hover .product-img {
-      transform: scale(1.05);
-    }
-    .badge-pos {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-    }
-    .badge-pos-right {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-    }
-    .product-info {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    .product-cat {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: var(--accent);
-      margin-bottom: 6px;
-    }
-    .product-name {
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1.35;
-      margin-bottom: 8px;
-    }
-    .product-desc {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 14px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .product-rating {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      margin-bottom: 16px;
-    }
-    .stars {
-      color: #fbbf24;
-      font-weight: 700;
-    }
-    .reviews {
-      color: var(--text-muted);
-    }
-    .product-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: auto;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-    .product-price {
-      font-family: var(--font-heading);
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #fff;
-    }
-    .currency {
-      color: #818cf8;
-      font-size: 0.9rem;
-      margin-right: 2px;
-    }
-    .btn-add {
-      padding: 6px 14px;
-    }
-
-    /* Loading and Empty States */
-    .loading-state, .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 0;
-      gap: 16px;
-      color: var(--text-secondary);
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(79, 70, 229, 0.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Modal Detail */
-    .modal-detail {
-      max-width: 800px;
-      padding: 32px;
-      position: relative;
-    }
-    .modal-close-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      cursor: pointer;
-    }
-    .modal-detail-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 28px;
-    }
-    .modal-product-img {
-      width: 100%;
-      height: 340px;
-      object-fit: cover;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-    }
-    .modal-info-col {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .modal-title {
-      font-size: 1.5rem;
-      line-height: 1.25;
-    }
-    .modal-price {
-      font-family: var(--font-heading);
-      font-size: 1.85rem;
-      font-weight: 800;
-      color: #818cf8;
-    }
-    .modal-desc {
-      font-size: 0.925rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-    .stock-indicator {
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-    .in-stock { color: var(--success); }
-    .low-stock { color: var(--warning); }
-    .out-stock { color: var(--danger); }
-    .modal-actions {
-      margin-top: auto;
-      display: flex;
-      gap: 16px;
-      align-items: flex-end;
-    }
-    .qty-control {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .qty-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: var(--bg-surface-elevated);
-      color: var(--text-main);
-      cursor: pointer;
-    }
-    .modal-add-btn {
-      flex: 1;
-      padding: 12px;
-    }
-    @media (max-width: 768px) {
-      .hero-title {
-        font-size: 2.25rem;
-      }
-      .modal-detail-grid {
-        grid-template-columns: 1fr;
-      }
-      .modal-product-img {
-        height: 220px;
-      }
-    }
-  `]
+  `
 })
 export class HomeComponent implements OnInit {
   productService = inject(ProductService);

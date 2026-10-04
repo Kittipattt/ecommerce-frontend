@@ -9,64 +9,68 @@ import { Order, OrderStatus } from '../../models/order.model';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
-    <div class="orders-page">
-      <div class="orders-header">
+    <div class="max-w-4xl mx-auto px-6 py-10 w-full">
+      <div class="flex justify-between items-end mb-8 flex-wrap gap-4">
         <div>
-          <h1 class="page-title">My Orders</h1>
-          <p class="page-subtitle">Track your delivery status and purchase history</p>
+          <h1 class="font-heading text-3xl font-extrabold text-white">My Orders</h1>
+          <p class="text-sm text-gray-400 mt-1">Track your delivery status and purchase history</p>
         </div>
         <a routerLink="/" class="btn btn-secondary btn-sm">Continue Shopping</a>
       </div>
 
       @if (isLoading()) {
-        <div class="loading-state">
-          <div class="spinner"></div>
-          <p>Retrieving your order history...</p>
+        <div class="flex flex-col items-center gap-4 py-16 text-gray-400">
+          <div class="w-10 h-10 border-3 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
+          <p class="text-sm">Retrieving your order history...</p>
         </div>
       } @else if (orders().length === 0) {
-        <div class="empty-orders card">
-          <div class="empty-icon">📦</div>
-          <h3>No Orders Yet</h3>
-          <p>You haven't placed any orders yet. Discover our premium gear and enjoy fast shipping!</p>
-          <a routerLink="/" class="btn btn-primary">Start Shopping</a>
+        <div class="p-12 rounded-2xl bg-gray-900 border border-gray-800 text-center flex flex-col items-center gap-3">
+          <div class="text-5xl mb-2">📦</div>
+          <h3 class="font-heading text-xl font-bold text-gray-200">No Orders Yet</h3>
+          <p class="text-sm text-gray-400 max-w-sm">You haven't placed any orders yet. Discover our premium gear and enjoy fast shipping!</p>
+          <a routerLink="/" class="btn btn-primary mt-3">Start Shopping</a>
         </div>
       } @else {
-        <div class="orders-list">
+        <div class="space-y-6">
           @for (order of orders(); track order.id) {
-            <div class="card order-card">
-              <div class="order-card-header">
-                <div class="order-meta">
-                  <span class="order-id">Order <strong class="font-mono text-primary">{{ order.orderNumber }}</strong></span>
-                  <span class="order-date text-secondary">Placed on {{ order.createdAt | date:'mediumDate' }}</span>
+            <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden shadow-xl">
+              <!-- Order Header -->
+              <div class="p-5 sm:px-6 bg-gray-800/60 border-b border-gray-800 flex justify-between items-center flex-wrap gap-3">
+                <div class="flex items-center gap-4 flex-wrap text-sm">
+                  <span class="text-gray-300">Order <strong class="font-mono text-indigo-400">{{ order.orderNumber }}</strong></span>
+                  <span class="text-gray-500">•</span>
+                  <span class="text-gray-400">Placed on {{ order.createdAt | date:'mediumDate' }}</span>
                 </div>
-                <div class="order-status-badge">
+                <div>
                   <span class="badge" [ngClass]="getStatusBadgeClass(order.status)">
                     {{ order.status }}
                   </span>
                 </div>
               </div>
 
-              <div class="order-items-list">
+              <!-- Order Items -->
+              <div class="p-5 sm:p-6 space-y-4">
                 @for (item of order.items; track item.id) {
-                  <div class="order-item-row">
-                    <img [src]="item.product.imageUrl" [alt]="item.productName" class="item-img" />
-                    <div class="item-info">
-                      <span class="item-name">{{ item.productName }}</span>
-                      <span class="item-qty text-secondary">Quantity: {{ item.quantity }}</span>
+                  <div class="flex items-center gap-4">
+                    <img [src]="item.product.imageUrl" [alt]="item.productName" class="w-14 h-14 rounded-xl object-cover border border-gray-700/60 shrink-0 bg-gray-800" />
+                    <div class="flex-1 min-w-0">
+                      <span class="font-semibold text-sm text-gray-200 block truncate">{{ item.productName }}</span>
+                      <span class="text-xs text-gray-400 mt-0.5 block">Quantity: {{ item.quantity }}</span>
                     </div>
-                    <span class="item-price">\${{ (item.price * item.quantity) | number:'1.2-2' }}</span>
+                    <span class="font-mono font-bold text-sm text-gray-200">\${{ (item.price * item.quantity) | number:'1.2-2' }}</span>
                   </div>
                 }
               </div>
 
-              <div class="order-card-footer">
-                <div class="shipping-info">
-                  <span class="shipping-label">Ship to:</span>
-                  <span class="shipping-val">{{ order.shippingName }} • {{ order.shippingAddress }}</span>
+              <!-- Order Footer -->
+              <div class="px-6 py-4 bg-black/20 border-t border-gray-800/80 flex justify-between items-center flex-wrap gap-3">
+                <div class="text-xs text-gray-400">
+                  <span>Ship to:</span>
+                  <span class="text-gray-200 ml-1.5 font-medium">{{ order.shippingName }} • {{ order.shippingAddress }}</span>
                 </div>
-                <div class="order-total">
-                  <span class="total-label">Total Amount:</span>
-                  <span class="total-val">\${{ order.totalAmount | number:'1.2-2' }}</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-gray-400">Total Amount:</span>
+                  <span class="font-heading font-extrabold text-lg text-indigo-400 font-mono">\${{ order.totalAmount | number:'1.2-2' }}</span>
                 </div>
               </div>
             </div>
@@ -74,157 +78,7 @@ import { Order, OrderStatus } from '../../models/order.model';
         </div>
       }
     </div>
-  `,
-  styles: [`
-    .orders-page {
-      max-width: 1000px;
-      margin: 40px auto 80px auto;
-      padding: 0 24px;
-      width: 100%;
-    }
-    .orders-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .page-title {
-      font-size: 2rem;
-    }
-    .page-subtitle {
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-    .orders-list {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .order-card {
-      padding: 0;
-      overflow: hidden;
-    }
-    .order-card-header {
-      padding: 18px 24px;
-      background: var(--bg-surface-elevated);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .order-meta {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-    }
-    .order-id {
-      font-size: 0.95rem;
-    }
-    .order-date {
-      font-size: 0.85rem;
-    }
-    .order-items-list {
-      padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .order-item-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .item-img {
-      width: 56px;
-      height: 56px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-    }
-    .item-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .item-name {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-    .item-qty {
-      font-size: 0.8rem;
-    }
-    .item-price {
-      font-weight: 700;
-      font-size: 1rem;
-    }
-    .order-card-footer {
-      padding: 16px 24px;
-      background: rgba(0, 0, 0, 0.2);
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .shipping-info {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
-    .shipping-val {
-      color: var(--text-main);
-      margin-left: 6px;
-    }
-    .order-total {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .total-label {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-    .total-val {
-      font-family: var(--font-heading);
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: #818cf8;
-    }
-    .empty-orders {
-      text-align: center;
-      padding: 60px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-    .empty-icon {
-      font-size: 3rem;
-    }
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 60px;
-      color: var(--text-secondary);
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(79, 70, 229, 0.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  `]
+  `
 })
 export class MyOrdersComponent implements OnInit {
   orderService = inject(OrderService);

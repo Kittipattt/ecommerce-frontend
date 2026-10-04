@@ -11,61 +11,64 @@ import { Category, Product, ProductRequest } from '../../../models/product.model
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   template: `
-    <div class="admin-page">
-      <div class="admin-header">
+    <div class="max-w-7xl mx-auto px-6 py-10 w-full">
+      <!-- Admin Header -->
+      <div class="flex justify-between items-end mb-8 flex-wrap gap-4">
         <div>
-          <div class="breadcrumb">
-            <a routerLink="/admin/dashboard">Admin</a> / <span>Inventory Management</span>
+          <div class="text-xs text-gray-400 mb-2 flex items-center gap-1.5">
+            <a routerLink="/admin/dashboard" class="text-indigo-400 hover:text-indigo-300">Admin</a>
+            <span>/</span>
+            <span>Inventory Management</span>
           </div>
-          <h1 class="page-title">Manage Products</h1>
-          <p class="page-subtitle">Add, edit, adjust pricing, and monitor catalog inventory levels</p>
+          <h1 class="font-heading text-3xl font-extrabold text-white">Manage Products</h1>
+          <p class="text-sm text-gray-400 mt-1">Add, edit, adjust pricing, and monitor catalog inventory levels</p>
         </div>
         <button class="btn btn-primary" (click)="openCreateModal()">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Add New Product
         </button>
       </div>
 
       <!-- Products Data Table Card -->
-      <div class="card table-card">
+      <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden shadow-xl">
         @if (isLoading()) {
-          <div class="loading-state">
-            <div class="spinner"></div>
-            <p>Loading inventory items...</p>
+          <div class="flex flex-col items-center gap-4 py-20 text-gray-400">
+            <div class="w-10 h-10 border-3 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
+            <p class="text-sm">Loading inventory items...</p>
           </div>
         } @else {
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-gray-300">
+              <thead class="bg-gray-800/80 text-xs uppercase tracking-wider text-gray-400 border-b border-gray-800">
                 <tr>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Price</th>
-                  <th>Stock Quantity</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th class="px-5 py-4 font-semibold">Product</th>
+                  <th class="px-5 py-4 font-semibold">Category</th>
+                  <th class="px-5 py-4 font-semibold">Price</th>
+                  <th class="px-5 py-4 font-semibold">Stock Quantity</th>
+                  <th class="px-5 py-4 font-semibold">Status</th>
+                  <th class="px-5 py-4 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="divide-y divide-gray-800/60">
                 @for (product of products(); track product.id) {
-                  <tr>
-                    <td>
-                      <div class="product-cell">
-                        <img [src]="product.imageUrl" [alt]="product.name" class="table-thumb" />
-                        <div class="product-name-block">
-                          <span class="p-title">{{ product.name }}</span>
-                          <span class="p-id text-secondary">ID: #{{ product.id }}</span>
+                  <tr class="hover:bg-gray-800/30 transition-colors">
+                    <td class="px-5 py-4">
+                      <div class="flex items-center gap-3.5">
+                        <img [src]="product.imageUrl" [alt]="product.name" class="w-12 h-12 rounded-xl object-cover bg-gray-800 border border-gray-700/60 shrink-0" />
+                        <div>
+                          <span class="font-semibold text-gray-200 block">{{ product.name }}</span>
+                          <span class="text-xs text-gray-400 font-mono">ID: #{{ product.id }}</span>
                         </div>
                       </div>
                     </td>
-                    <td>{{ product.category.name }}</td>
-                    <td><strong class="text-accent">\${{ product.price | number:'1.2-2' }}</strong></td>
-                    <td>
-                      <span class="stock-badge" [class.low-stock-text]="product.stockQuantity <= 5">
+                    <td class="px-5 py-4 text-gray-300">{{ product.category.name }}</td>
+                    <td class="px-5 py-4 font-mono font-bold text-cyan-400">\${{ product.price | number:'1.2-2' }}</td>
+                    <td class="px-5 py-4">
+                      <span class="font-mono text-xs font-semibold" [ngClass]="product.stockQuantity <= 5 ? 'text-red-400 font-bold' : 'text-gray-300'">
                         {{ product.stockQuantity }} units
                       </span>
                     </td>
-                    <td>
+                    <td class="px-5 py-4">
                       @if (product.stockQuantity > 5) {
                         <span class="badge badge-success">In Stock</span>
                       } @else if (product.stockQuantity > 0) {
@@ -74,8 +77,8 @@ import { Category, Product, ProductRequest } from '../../../models/product.model
                         <span class="badge badge-danger">Sold Out</span>
                       }
                     </td>
-                    <td>
-                      <div class="action-buttons">
+                    <td class="px-5 py-4 text-right">
+                      <div class="inline-flex gap-2">
                         <button class="btn btn-secondary btn-sm" (click)="openEditModal(product)">
                           Edit
                         </button>
@@ -94,58 +97,58 @@ import { Category, Product, ProductRequest } from '../../../models/product.model
 
       <!-- Add / Edit Modal -->
       @if (showModal()) {
-        <div class="modal-overlay" (click)="closeModal()">
-          <div class="modal-content" (click)="$event.stopPropagation()">
-            <div class="modal-header">
-              <h2>{{ editingProductId() ? 'Edit Product' : 'Add New Product' }}</h2>
-              <button class="close-btn" (click)="closeModal()">✕</button>
+        <div class="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-[1000] p-4 animate-in fade-in duration-200" (click)="closeModal()">
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-200" (click)="$event.stopPropagation()">
+            <div class="flex justify-between items-center p-6 border-b border-gray-800">
+              <h2 class="font-heading text-xl font-bold text-white">{{ editingProductId() ? 'Edit Product' : 'Add New Product' }}</h2>
+              <button class="text-gray-400 hover:text-white p-1 text-base rounded-lg transition-colors cursor-pointer" (click)="closeModal()">✕</button>
             </div>
 
-            <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="modal-body">
-              <div class="form-group">
-                <label class="form-label">Product Name *</label>
+            <form [formGroup]="productForm" (ngSubmit)="saveProduct()" class="p-6 space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Product Name *</label>
                 <input type="text" formControlName="name" class="form-control" placeholder="e.g. Sony WH-1000XM5" />
               </div>
 
-              <div class="form-row">
-                <div class="form-group col">
-                  <label class="form-label">Category *</label>
-                  <select formControlName="categoryId" class="form-control">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Category *</label>
+                  <select formControlName="categoryId" class="form-control cursor-pointer">
                     @for (cat of categories(); track cat.id) {
                       <option [value]="cat.id">{{ cat.name }}</option>
                     }
                   </select>
                 </div>
 
-                <div class="form-group col">
-                  <label class="form-label">Price (\$) *</label>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Price (\$) *</label>
                   <input type="number" step="0.01" formControlName="price" class="form-control" />
                 </div>
 
-                <div class="form-group col">
-                  <label class="form-label">Stock Quantity *</label>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Stock Quantity *</label>
                   <input type="number" formControlName="stockQuantity" class="form-control" />
                 </div>
               </div>
 
-              <div class="form-group">
-                <label class="form-label">Image URL *</label>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Image URL *</label>
                 <input type="text" formControlName="imageUrl" class="form-control" placeholder="https://..." />
               </div>
 
-              <div class="form-group">
-                <label class="form-label">Description</label>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5">Description</label>
                 <textarea rows="3" formControlName="description" class="form-control" placeholder="Specs and features..."></textarea>
               </div>
 
-              <div class="form-group form-check">
-                <label class="check-label">
-                  <input type="checkbox" formControlName="featured" />
+              <div class="pt-1">
+                <label class="flex items-center gap-2.5 cursor-pointer text-sm text-gray-300">
+                  <input type="checkbox" formControlName="featured" class="w-4 h-4 accent-indigo-500 rounded" />
                   <span>Featured Product (Display in Hero / Highlights)</span>
                 </label>
               </div>
 
-              <div class="modal-footer">
+              <div class="flex justify-end gap-3 pt-4 border-t border-gray-800">
                 <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
                 <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">
                   {{ editingProductId() ? 'Save Changes' : 'Create Product' }}
@@ -156,131 +159,7 @@ import { Category, Product, ProductRequest } from '../../../models/product.model
         </div>
       }
     </div>
-  `,
-  styles: [`
-    .admin-page {
-      max-width: 1280px;
-      margin: 40px auto 80px auto;
-      padding: 0 24px;
-      width: 100%;
-    }
-    .breadcrumb {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-    .breadcrumb a {
-      color: #818cf8;
-    }
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .page-title {
-      font-size: 2rem;
-    }
-    .page-subtitle {
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-    .table-card {
-      padding: 0;
-      overflow: hidden;
-    }
-    .product-cell {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .table-thumb {
-      width: 48px;
-      height: 48px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-    }
-    .product-name-block {
-      display: flex;
-      flex-direction: column;
-    }
-    .p-title {
-      font-weight: 600;
-    }
-    .p-id {
-      font-size: 0.75rem;
-    }
-    .stock-badge {
-      font-weight: 600;
-    }
-    .low-stock-text {
-      color: #fca5a5;
-    }
-    .action-buttons {
-      display: flex;
-      gap: 8px;
-    }
-    .modal-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .close-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 1.25rem;
-      cursor: pointer;
-    }
-    .modal-body {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .form-row {
-      display: flex;
-      gap: 16px;
-    }
-    .form-row .col {
-      flex: 1;
-    }
-    .check-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 60px;
-      color: var(--text-secondary);
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(79, 70, 229, 0.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  `]
+  `
 })
 export class AdminProductsComponent implements OnInit {
   productService = inject(ProductService);
@@ -293,30 +172,27 @@ export class AdminProductsComponent implements OnInit {
   showModal = signal<boolean>(false);
   editingProductId = signal<number | null>(null);
 
-  productForm!: FormGroup;
+  productForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required]],
+    description: [''],
+    price: [0, [Validators.required, Validators.min(0.01)]],
+    stockQuantity: [0, [Validators.required, Validators.min(0)]],
+    categoryId: [1, [Validators.required]],
+    imageUrl: ['', [Validators.required]],
+    featured: [false]
+  });
 
   ngOnInit() {
-    this.initForm();
     this.loadCategories();
     this.loadProducts();
-  }
-
-  initForm() {
-    this.productForm = this.fb.group({
-      name: ['', [Validators.required]],
-      description: [''],
-      price: [0, [Validators.required, Validators.min(0)]],
-      stockQuantity: [0, [Validators.required, Validators.min(0)]],
-      categoryId: [1, [Validators.required]],
-      imageUrl: ['https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800', [Validators.required]],
-      featured: [false]
-    });
   }
 
   loadCategories() {
     this.productService.getCategories().subscribe({
       next: (res) => {
-        if (res.success) this.categories.set(res.data);
+        if (res.success && res.data) {
+          this.categories.set(res.data);
+        }
       }
     });
   }

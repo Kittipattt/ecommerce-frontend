@@ -11,73 +11,79 @@ import { Order, OrderStatus } from '../../../models/order.model';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
-    <div class="admin-page">
-      <div class="admin-header">
-        <div>
-          <div class="breadcrumb">
-            <a routerLink="/admin/dashboard">Admin</a> / <span>Fulfillment</span>
-          </div>
-          <h1 class="page-title">Manage Orders</h1>
-          <p class="page-subtitle">Track customer orders, update shipping progress and delivery states</p>
+    <div class="max-w-7xl mx-auto px-6 py-10 w-full">
+      <div class="mb-8">
+        <div class="text-xs text-gray-400 mb-2 flex items-center gap-1.5">
+          <a routerLink="/admin/dashboard" class="text-indigo-400 hover:text-indigo-300">Admin</a>
+          <span>/</span>
+          <span>Fulfillment</span>
         </div>
+        <h1 class="font-heading text-3xl font-extrabold text-white">Manage Orders</h1>
+        <p class="text-sm text-gray-400 mt-1">Track customer orders, update shipping progress and delivery states</p>
       </div>
 
       <!-- Orders Table Card -->
-      <div class="card table-card">
+      <div class="rounded-2xl bg-gray-900 border border-gray-800 overflow-hidden shadow-xl">
         @if (isLoading()) {
-          <div class="loading-state">
-            <div class="spinner"></div>
-            <p>Loading customer orders...</p>
+          <div class="flex flex-col items-center gap-4 py-20 text-gray-400">
+            <div class="w-10 h-10 border-3 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
+            <p class="text-sm">Loading customer orders...</p>
           </div>
         } @else if (orders().length === 0) {
-          <div class="empty-state">
+          <div class="py-20 text-center text-gray-400">
             <p>No orders recorded in the system yet.</p>
           </div>
         } @else {
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-gray-300">
+              <thead class="bg-gray-800/80 text-xs uppercase tracking-wider text-gray-400 border-b border-gray-800">
                 <tr>
-                  <th>Order #</th>
-                  <th>Customer Info</th>
-                  <th>Items Purchased</th>
-                  <th>Total Amount</th>
-                  <th>Placed Date</th>
-                  <th>Order Status Workflow</th>
+                  <th class="px-5 py-4 font-semibold">Order #</th>
+                  <th class="px-5 py-4 font-semibold">Customer Info</th>
+                  <th class="px-5 py-4 font-semibold">Items Purchased</th>
+                  <th class="px-5 py-4 font-semibold">Total Amount</th>
+                  <th class="px-5 py-4 font-semibold">Placed Date</th>
+                  <th class="px-5 py-4 font-semibold">Order Status Workflow</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="divide-y divide-gray-800/60">
                 @for (order of orders(); track order.id) {
-                  <tr>
-                    <td>
-                      <strong class="font-mono text-primary">{{ order.orderNumber }}</strong>
+                  <tr class="hover:bg-gray-800/30 transition-colors">
+                    <td class="px-5 py-4">
+                      <strong class="font-mono text-indigo-400">{{ order.orderNumber }}</strong>
                     </td>
-                    <td>
-                      <div class="customer-info-cell">
-                        <span class="c-name font-bold">{{ order.shippingName }}</span>
-                        <span class="c-phone text-secondary">{{ order.phone }}</span>
-                        <span class="c-addr text-secondary">{{ order.shippingAddress }}</span>
+                    <td class="px-5 py-4">
+                      <div class="flex flex-col gap-0.5 max-w-[220px] text-xs">
+                        <span class="font-bold text-gray-200 text-sm">{{ order.shippingName }}</span>
+                        <span class="text-gray-400">{{ order.phone }}</span>
+                        <span class="text-gray-400 leading-tight">{{ order.shippingAddress }}</span>
                       </div>
                     </td>
-                    <td>
-                      <div class="order-items-cell">
+                    <td class="px-5 py-4">
+                      <div class="flex flex-col gap-1 text-xs text-gray-300">
                         @for (item of order.items; track item.id) {
-                          <div class="item-line">
+                          <div>
                             <span>{{ item.quantity }}x {{ item.productName }}</span>
                           </div>
                         }
                       </div>
                     </td>
-                    <td>
-                      <strong class="text-accent font-bold">\${{ order.totalAmount | number:'1.2-2' }}</strong>
+                    <td class="px-5 py-4">
+                      <strong class="text-cyan-400 font-bold font-mono">\${{ order.totalAmount | number:'1.2-2' }}</strong>
                     </td>
-                    <td>
-                      <span class="text-secondary">{{ order.createdAt | date:'short' }}</span>
+                    <td class="px-5 py-4">
+                      <span class="text-gray-400 text-xs">{{ order.createdAt | date:'short' }}</span>
                     </td>
-                    <td>
+                    <td class="px-5 py-4">
                       <select
-                        class="form-control status-select"
-                        [ngClass]="'status-' + order.status.toLowerCase()"
+                        class="bg-gray-800 text-xs font-bold px-3 py-1.5 rounded-lg border cursor-pointer outline-none transition-colors"
+                        [ngClass]="{
+                          'border-amber-500/50 text-amber-300': order.status === 'PENDING',
+                          'border-indigo-500/50 text-indigo-300': order.status === 'PROCESSING',
+                          'border-cyan-500/50 text-cyan-300': order.status === 'SHIPPED',
+                          'border-emerald-500/50 text-emerald-300': order.status === 'DELIVERED',
+                          'border-red-500/50 text-red-300': order.status === 'CANCELLED'
+                        }"
                         [ngModel]="order.status"
                         (ngModelChange)="onStatusChange(order, $event)">
                         <option value="PENDING">PENDING</option>
@@ -95,88 +101,7 @@ import { Order, OrderStatus } from '../../../models/order.model';
         }
       </div>
     </div>
-  `,
-  styles: [`
-    .admin-page {
-      max-width: 1280px;
-      margin: 40px auto 80px auto;
-      padding: 0 24px;
-      width: 100%;
-    }
-    .breadcrumb {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
-    .breadcrumb a {
-      color: #818cf8;
-    }
-    .admin-header {
-      margin-bottom: 32px;
-    }
-    .page-title {
-      font-size: 2rem;
-    }
-    .page-subtitle {
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-    .table-card {
-      padding: 0;
-      overflow: hidden;
-    }
-    .customer-info-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      max-width: 220px;
-      font-size: 0.85rem;
-    }
-    .c-name {
-      color: var(--text-main);
-    }
-    .c-phone, .c-addr {
-      font-size: 0.775rem;
-      line-height: 1.3;
-    }
-    .order-items-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 0.85rem;
-    }
-    .status-select {
-      width: auto;
-      padding: 6px 12px;
-      font-size: 0.825rem;
-      font-weight: 700;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-    }
-    .status-pending { border-color: var(--warning); color: #fcd34d; }
-    .status-processing { border-color: var(--primary); color: #a5b4fc; }
-    .status-shipped { border-color: var(--accent); color: #67e8f9; }
-    .status-delivered { border-color: var(--success); color: #6ee7b7; }
-    .status-cancelled { border-color: var(--danger); color: #fca5a5; }
-
-    .loading-state, .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 60px;
-      color: var(--text-secondary);
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(79, 70, 229, 0.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  `]
+  `
 })
 export class AdminOrdersComponent implements OnInit {
   orderService = inject(OrderService);

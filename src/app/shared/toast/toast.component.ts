@@ -7,89 +7,34 @@ import { NotificationService } from '../../services/notification.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="toast-container">
+    <div class="fixed top-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none max-w-sm w-full">
       @for (toast of notificationService.toasts(); track toast.id) {
-        <div class="toast-item" [ngClass]="'toast-' + toast.type" (click)="notificationService.remove(toast.id)">
-          <div class="toast-icon">
+        <div
+          class="pointer-events-auto w-full p-4 rounded-xl flex items-center gap-3 bg-gray-800/95 backdrop-blur-md text-gray-100 shadow-2xl border transition-all cursor-pointer animate-in fade-in slide-in-from-right duration-200"
+          [ngClass]="{
+            'border-gray-700/80 border-l-4 border-l-emerald-500 bg-gradient-to-r from-emerald-950/40 via-gray-800/95 to-gray-800/95': toast.type === 'success',
+            'border-gray-700/80 border-l-4 border-l-red-500 bg-gradient-to-r from-red-950/40 via-gray-800/95 to-gray-800/95': toast.type === 'error',
+            'border-gray-700/80 border-l-4 border-l-amber-500 bg-gradient-to-r from-amber-950/40 via-gray-800/95 to-gray-800/95': toast.type === 'warning',
+            'border-gray-700/80 border-l-4 border-l-cyan-500 bg-gradient-to-r from-cyan-950/40 via-gray-800/95 to-gray-800/95': toast.type === 'info'
+          }"
+          (click)="notificationService.remove(toast.id)">
+          <div class="shrink-0">
             @if (toast.type === 'success') {
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+              <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
             } @else if (toast.type === 'error') {
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+              <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
             } @else if (toast.type === 'warning') {
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             } @else {
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             }
           </div>
-          <span class="toast-msg">{{ toast.message }}</span>
-          <button class="toast-close" (click)="notificationService.remove(toast.id); $event.stopPropagation()">✕</button>
+          <span class="text-sm font-medium flex-1 text-gray-200">{{ toast.message }}</span>
+          <button class="text-gray-400 hover:text-white transition-colors text-sm p-1 shrink-0" (click)="notificationService.remove(toast.id); $event.stopPropagation()">✕</button>
         </div>
       }
     </div>
-  `,
-  styles: [`
-    .toast-container {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      pointer-events: none;
-    }
-    .toast-item {
-      pointer-events: auto;
-      min-width: 300px;
-      max-width: 420px;
-      padding: 14px 18px;
-      border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--bg-surface-elevated);
-      color: var(--text-main);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--border);
-      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer;
-    }
-    .toast-success {
-      border-left: 4px solid var(--success);
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, var(--bg-surface-elevated) 30%);
-    }
-    .toast-error {
-      border-left: 4px solid var(--danger);
-      background: linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, var(--bg-surface-elevated) 30%);
-    }
-    .toast-warning {
-      border-left: 4px solid var(--warning);
-      background: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, var(--bg-surface-elevated) 30%);
-    }
-    .toast-info {
-      border-left: 4px solid var(--accent);
-      background: linear-gradient(90deg, rgba(6, 182, 212, 0.15) 0%, var(--bg-surface-elevated) 30%);
-    }
-    .toast-msg {
-      font-size: 0.9rem;
-      font-weight: 500;
-      flex: 1;
-    }
-    .toast-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .toast-close:hover {
-      color: var(--text-main);
-    }
-    @keyframes slideIn {
-      from { transform: translateX(100%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-  `]
+  `
 })
 export class ToastComponent {
   notificationService = inject(NotificationService);

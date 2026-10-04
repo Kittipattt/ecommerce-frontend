@@ -1,59 +1,53 @@
-# Frontend
+# NexusTech Storefront & Admin Portal (Angular 21 Client)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.24.
+Decoupled Frontend Application for E-Commerce and Backoffice Operations.
 
-## Development server
+## Tech Stack
+- **Framework**: Angular 21 (Standalone Components, Zoneless ready)
+- **State Management**: Angular Signals (`signal()`, `computed()`)
+- **Control Flow**: Modern Built-in Control Flow (`@if`, `@for`, `@let`)
+- **Forms**: Angular Reactive Forms with Custom Validators
+- **HTTP Client**: Functional HTTP Interceptors (`authInterceptor`)
+- **Routing**: Modern Component Input Binding & Functional Guards (`authGuard`, `adminGuard`)
+- **Styling**: Vanilla CSS Design Tokens (Dark slate glassmorphism, responsive grid)
 
-To start a local development server, run:
+---
 
+## Getting Started
+
+### 1. Install Dependencies
 ```bash
-ng serve
+cd frontend
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+### 2. Start Development Server
 ```bash
-ng generate component component-name
+npm start
+# or: npx ng serve --port 4200
 ```
+Open your browser at: `http://localhost:4200`
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Features
+- **Storefront**:
+  - Live search with instant filtering
+  - Category selector pills
+  - Sorting (Price Low-to-High, High-to-Low, Newest, Top Rated)
+  - Interactive quick-view product modal
+  - Stock warning badges (Low Stock, Sold Out)
+- **Shopping Cart**:
+  - Reactive Cart Drawer with Signals
+  - Increment / decrement quantity with real-time stock ceiling
+  - Auto-persists to `localStorage`
+- **Checkout & Orders**:
+  - Multi-input shipping & payment form with validation
+  - Real-time stock deduction from Spring Boot backend
+  - Customer Order tracking with status indicators
+- **Admin Management**:
+  - Executive Dashboard with KPI cards & low-stock alerts
+  - Product Catalog CRUD (Add, Edit, Delete)
+  - Order Status Workflow management (`PENDING` -> `SHIPPED` -> `DELIVERED`)
+- **Quick Demo Login**:
+  - 1-click buttons for Admin (`admin@store.com`) and Customer (`customer@store.com`)

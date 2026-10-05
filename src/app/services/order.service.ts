@@ -12,12 +12,14 @@ export interface PaginatedOrders {
   number: number;
 }
 
+import { API_BASE_URL } from '../core/api.config';
+
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:8080/api/orders';
+  private readonly API_URL = `${API_BASE_URL}/orders`;
 
   createOrder(request: OrderCreateRequest): Observable<ApiResponse<Order>> {
     return this.http.post<ApiResponse<Order>>(this.API_URL, request);

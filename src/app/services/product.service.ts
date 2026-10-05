@@ -4,13 +4,15 @@ import { Observable } from 'rxjs';
 import { ApiResponse } from '../models/api-response.model';
 import { Category, PaginatedProducts, Product, ProductRequest } from '../models/product.model';
 
+import { API_BASE_URL } from '../core/api.config';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:8080/api/products';
-  private readonly CAT_URL = 'http://localhost:8080/api/categories';
+  private readonly API_URL = `${API_BASE_URL}/products`;
+  private readonly CAT_URL = `${API_BASE_URL}/categories`;
 
   getProducts(categoryId?: number, search?: string, page = 0, size = 12, sortBy = 'id', sortDirection = 'desc'): Observable<ApiResponse<PaginatedProducts>> {
     let params = new HttpParams()

@@ -6,6 +6,8 @@ import { ApiResponse } from '../models/api-response.model';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/user.model';
 import { NotificationService } from './notification.service';
 
+import { API_BASE_URL } from '../core/api.config';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +16,7 @@ export class AuthService {
   private router = inject(Router);
   private notification = inject(NotificationService);
 
-  private readonly API_URL = 'http://localhost:8080/api/auth';
+  private readonly API_URL = `${API_BASE_URL}/auth`;
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'auth_user';
 
